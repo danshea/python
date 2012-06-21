@@ -1,0 +1,10 @@
+Date:2012-06-21
+Author:djs
+Description:
+A first crack at implementing keypair generation and key management
+Ran into the problem at previous sysadmin positions, many ways to do this
+kind of thing, but I figured it would be a fun exercise.
+
+Please NOTE:  The keypair in the log shown here are not being used by anything
+It was for a sample run to test the functionality, no private keys have been
+compromised. ;-)
