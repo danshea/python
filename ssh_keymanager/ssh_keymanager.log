@@ -1,0 +1,65 @@
+2012-06-21 16:56:58,531 Logging Started
+2012-06-21 16:56:58,531 created dbfile: authorized_keys.db
+2012-06-21 16:56:58,531 db connection opened
+2012-06-21 16:56:58,532 db cursor created
+2012-06-21 16:56:58,792 created db table private_keys, statement executed: CREATE TABLE private_keys (username text, key text, digest text, timestamp text)
+2012-06-21 16:56:58,942 created db table public_keys, statement executed: CREATE TABLE public_keys (username text, key text, digest text, timestamp text)
+2012-06-21 16:56:58,942 db changes committed
+2012-06-21 16:56:58,943 db connection closed
+2012-06-21 16:56:58,943 KeyManager object successfully initialized
+2012-06-21 16:56:59,199 db cursor created
+2012-06-21 16:56:59,199 db cursor created
+2012-06-21 16:56:59,199 inserted key -----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEA0A3yeIiRuxgLNe5SI6siSyCI6VpZJ5oUp8bH8pwqvSeJ5TyB
+wb/ZcaqS9yosLnCrq1GgqSE20cy0nTdSAlNZLW881mLofYXt0HDIak8IRO+tAvp1
+Hnjq0PJ+p/h5ctbkc2+yk1J9HGnEvX+QcIUKXVY8zGu4N6NrsjEGDYo/oZZ9U78a
+SE23TIVrhdATUPDXuhJYllsZ7jtPhLspW0qPkivNep1LBMGptUDniNQtYK+37+p6
+kEAki98cdK0B6ZhGYUQArmlw6hOYMhLY3A9dKRJ8fKIlehp51yDuMLgQFwxxGYSr
+J6FmnXbxgPp0iQOZIVA2Z4liIVvwe1OTBdeEHQIDAQABAoIBAGW2G86vPUdQ9tIT
+w1YqqKY/ro8eGy3QFr763+8MR5yXgsNttCWrC7uU3yo0FMtTS6mCS1/DnBAu2jFt
+xQrcAmHC2uQYEH6lBeD78g5+upUw8szc8nrGNE2X7zFguMbapW6FsbByCDXmw0a8
+4TkQ4UNGEI0DMFkK7HB9pO7joj30+YLnOlljKYCbQf7rI3ZscbmDqc6NnrDXvyjj
+b35PCMut+KI0qxk1gIWjz4XiTj7eES/PlzbygRQR0AgNaiEwlavGqVkGWQ5ygwVU
+Sfd696IKA9eGBk4M4zKXUgGlnidxPiwJB379G3WCYIQD5+BjL5Y71SdRbJnwM+r9
+mFus2UUCgYEA56lAm+9xFRHPtgt+k5mDjkdAD3O9Ahuq3Lb3KXxgvQuiQwfjO6nY
+KGKqUo4RtvHRqj0Oi8aqnzFWi76n0ivgzFvAYlBmZDLME4hHBZpAr+wY8eX0hjeb
+h04rONHqgcgktUXvGRyLwcyBUy01iTY12iihDtl2aOekpLJwfG968ysCgYEA5enF
+ZakINJrTmoiCC3APAjUqXBo1WMWLbCy9uV3h5StKU80kZmLTX9F8pO43XftDBJ1d
++Vy8J1Pg4X5fXPYM4rslZ4piX3Lg0M3CBNCDkT2BQ9CFUhK+mpUVuopQHEE299z0
+idpnLky850RmjA+rRKk/6Ta4TwWhCUvTzt1WYdcCgYAm+nhvhFs/k06ir85tYVAc
+WWqy7uNnfmZCWtq9dTsFs/ZqVuJqAIrpSKil2Vers4Z2oW1YIWZGANQyETNFjrJ1
+UB7Pq/1+cHmb87sXezvVHeGYmfuJtcOKgaGOHuvZSGa8xXaUgBQX2KQN7bZrTt7C
+xUFMMVTWE9vFBm0c0tkaHwKBgQDL0dFYTWBj2jnrDkdTQnVbvKwf2HAgkYgHTyam
+lS70jcsnvX4eck/26uz3/eMBowUHq0arEOYQa1C6NuDttYc43TXMs6Z//YSGN1Jg
+GEX61S6qYso+NzXYLoCDzag1VC8ZzzzOlNrR9d+lmkLaue1YQj7RTdxY2aGobxuH
+kTrKIwKBgQCMZQVy0tEupYTKtNE036kQuwnySGqNGUXAi48/ck9EQj/7i+wVwTjl
+uAod1qPhG/e0/CrroGpmS41VtyKByVS0Mf9CWOw66kLww+bYH5zzkGVWK1oWFSsz
+7rtJbISYQFS+1FeX144xHko7p54paKTpvvUuZybMT8SBGb8cQRmISA==
+-----END RSA PRIVATE KEY-----
+ into private_keys
+2012-06-21 16:56:59,200 inserted key ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQDfJ4iJG7GAs17lIjqyJLIIjpWlknmhSnxsfynCq9J4nlPIHBv9lxqpL3KiwucKurUaCpITbRzLSdN1ICU1ktbzzWYuh9he3QcMhqTwhE760C+nUeeOrQ8n6n+Hly1uRzb7KTUn0cacS9f5BwhQpdVjzMa7g3o2uyMQYNij+hln1TvxpITbdMhWuF0BNQ8Ne6EliWWxnuO0+EuylbSo+SK816nUsEwam1QOeI1C1gr7fv6nqQQCSL3xx0rQHpmEZhRACuaXDqE5gyEtjcD10pEnx8oiV6GnnXIO4wuBAXDHEZhKsnoWaddvGA+nSJA5khUDZniWIhW/B7U5MF14Qd ssh key for dshea
+ into public_keys
+2012-06-21 16:56:59,360 db changes committed
+2012-06-21 16:56:59,360 db connection closed
+2012-06-21 16:56:59,360 db cursor created
+2012-06-21 16:56:59,360 db cursor created
+2012-06-21 16:56:59,361 db changes committed
+2012-06-21 16:56:59,361 db connection closed
+2012-06-21 16:56:59,361 db cursor created
+2012-06-21 16:56:59,361 db cursor created
+2012-06-21 16:56:59,361 db changes committed
+2012-06-21 16:56:59,361 db connection closed
+2012-06-21 16:56:59,362 db cursor created
+2012-06-21 16:56:59,362 db cursor created
+2012-06-21 16:56:59,362 db changes committed
+2012-06-21 16:56:59,362 db connection closed
+2012-06-21 16:56:59,362 db cursor created
+2012-06-21 16:56:59,362 db cursor created
+2012-06-21 16:56:59,363 db changes committed
+2012-06-21 16:56:59,363 db connection closed
+2012-06-21 16:56:59,363 db cursor created
+2012-06-21 16:56:59,363 db cursor created
+2012-06-21 16:56:59,363 deleted 1 rows from private_keys with digest=6AEFB0DD20F1EB24DBAFA18C08A57B51138285C7
+2012-06-21 16:56:59,363 deleted 1 rows from public_keys with digest=6AEFB0DD20F1EB24DBAFA18C08A57B51138285C7
+2012-06-21 16:56:59,586 db changes committed
+2012-06-21 16:56:59,586 db connection closed
