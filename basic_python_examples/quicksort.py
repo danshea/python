@@ -11,7 +11,6 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> execfile('quicksort.py')
 >>> quicksort
 <function quicksort at 0xb72901b4>
->>> import random
 >>> quicksort([random.randint(1,10) for i in range(10)])
 [2, 3, 4, 6, 6, 6, 8, 9, 9, 10]
 >>> quicksort([random.randint(1,10) for i in range(10)])
@@ -20,6 +19,8 @@ Type "help", "copyright", "credits" or "license" for more information.
 [1, 2, 2, 4, 5, 6, 6, 7, 9, 9]
 >>> 
 '''
+
+import random
 
 def quicksort(l):
     '''quicksort(l) - sort a list l using the infamous quicksort algorithm'''
@@ -49,3 +50,23 @@ def quicksort(l):
     l.append(pivot_val)
     l.extend(quicksort(right))
     return l
+
+'''
+While looking at my poorly written implementation I came across the interesting
+idea of utilizing list comprehensions.  I had incorrectly assumed it would be
+even slower, however it turns out that taking advantage of list comprehensions
+allows us a signifigant performance gain.  It also looks much, much cleaner!
+
+>>> qsort([random.randint(1,10) for i in range(10)])
+[1, 2, 6, 6, 6, 7, 7, 8, 8, 10]
+'''
+
+def qsort(l):
+    if l == []:
+        return []
+    else:
+        pivot = l[0] # Another interesting approach, simply using the head of
+                        # the list as the pivot instead of partitioning
+        left  = qsort([i for i in l[1:] if i < pivot])
+        right = qsort([i for i in l[1:] if i >= pivot])
+        return left + [pivot] + right
