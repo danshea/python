@@ -26,6 +26,21 @@ i	j	l
 2	1	[3, 9, 8]
 2	2	[3, 8, 9]
 [3, 8, 9]
+
+We can further refine this, eliminating the comparison of an element with itself and only performing
+n-1 comparisons when passed an already sorted list, however n**2 - n still yields O(n) for the worst case runtime
+as n**2 quickly outstrips any gains made as n tends towards infinity.
+
+>>> bubblesort2([random.randint(1,10) for i in range(3)])
+0	1	[5, 5, 7]
+1	2	[5, 5, 7]
+[5, 5, 7]
+>>> bubblesort2([random.randint(1,10) for i in range(3)])
+0	1	[10, 2, 3]
+1	2	[2, 10, 3]
+0	1	[2, 3, 10]
+1	2	[2, 3, 10]
+[2, 3, 10]
 '''
 
 def showstate(i, j, l):
@@ -43,4 +58,15 @@ def bubblesort(l):
                 l[i], l[j] = l[j], l[i]
             j += 1
         i += 1
+    return l
+
+def bubblesort2(l):
+    is_sorted = False
+    while not is_sorted:
+        is_sorted = True
+        for i in range(len(l)-1):
+            showstate(i, i+1, l)
+            if l[i] > l[i+1]:
+                l[i], l[i+1] = l[i+1], l[i]
+                is_sorted = False
     return l

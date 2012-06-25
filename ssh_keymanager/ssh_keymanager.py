@@ -64,11 +64,15 @@ class KeyManager():
         # file with the defaults
         self.config = ConfigParser.ConfigParser()
         if os.path.isfile(self.cfgfile) == False:
-            self.createSQL = 'CREATE TABLE ? (username text, key text, digest text, timestamp text)'
-            self.insertSQL = 'INSERT INTO ? VALUES (?, ?, ?, ?)'
-            self.updateSQL = 'UPDATE ? SET ? = ? WHERE ? = ?'
-            self.deleteSQL = 'DELETE FROM ? WHERE ? = ?'
-            self.selectSQL = 'SELECT * FROM ? WHERE ? = ?'
+            '''
+            It took me a while to figure this one out.  One cannot paramterize database identifiers, so we parameterize them using
+            python's string formatting and then use the recommended parameterization technique for literal values.
+            '''
+            self.createSQL = 'CREATE TABLE {0:s} (username text, key text, digest text, timestamp text)'
+            self.insertSQL = 'INSERT INTO {0:s} VALUES (?, ?, ?, ?)'
+            self.updateSQL = 'UPDATE {0:s} SET {1:s} = ? WHERE {2:s} = ?'
+            self.deleteSQL = 'DELETE FROM {0:s} WHERE {1:s} = ?'
+            self.selectSQL = 'SELECT * FROM {0:s} WHERE {1:s} = ?'
             
             self.config.add_section(self._dbsection)
             self.config.set(self._dbsection, self._dbfilekey, self.dbfile)
@@ -94,8 +98,8 @@ class KeyManager():
         else:
             self.config.read(cfgfile)
             self.dbfile       = self.config.get(self._dbsection,  self._dbfilekey)
-            self.privatetable = self.config.get(self._dbsection,  self._dbprivatetablekey)
-            self.publictable  = self.config.get(self._dbsection,  self._dbpublictablekey)
+            self.privatetable = self.config.get(self._dbsection,  self._privatetablekey)
+            self.publictable  = self.config.get(self._dbsection,  self._publictablekey)
             self.hasher       = self.config.get(self._dbsection,  self._hasherkey)
             self.logfile      = self.config.get(self._logsection, self._logfilekey)
             self.loglevel     = self.config.get(self._logsection, self._loglevelkey)
@@ -121,10 +125,10 @@ class KeyManager():
             logging.debug('db connection opened')
             self.curs = self.conn.cursor()
             logging.debug('db cursor created')
-            self.curs.execute(self.createSQL,(self.privatetable))
-            logging.info('created db table '+self.privatetable+', statement executed: ' + self.createSQL)
-            self.curs.execute(self.createSQL,(self.publictable))
-            logging.info('created db table '+self.publictable+', statement executed: ' + self.createSQL)
+            self.curs.execute(self.createSQL.format(self.privatetable))
+            logging.info('created db table {0:s}, statement executed: {1:s}'.format(self.privatetable, self.createSQL.format(self.privatetable)))
+            self.curs.execute(self.createSQL.format(self.publictable))
+            logging.info('created db table {0:s}, statement executed: {1:s}'.format(self.publictable, self.createSQL.format(self.publictable)))
             self.conn.commit()
             logging.debug('db changes committed')
             self.conn.close()
@@ -159,21 +163,23 @@ class KeyManager():
     def createkeys(self, username=''):
         '''createkeys(username): create an ssh key pair and store them in the db'''
         tmpprivate = tempfile.mkstemp()[1]
+        os.unlink(tmpprivate) # unlink the temp file or ssh-keygen will prompt to overwrite and program will hang waiting for input
         tmppublic  = tmpprivate+'.pub'
-        cmd = [self.keygencmd, ' -q ', ' -b ', '2048', ' -C ', '\'ssh key for '+username+'\'',
-               ' -t ', 'rsa', ' -f ', tmpfile]
-        subprocess.check_output(cmd, shell=False)
+        cmd = self.keygencmd+' -q -b 2048 -N \'\' -C \'ssh key for '+username+'\' -t rsa -f '+tmpprivate
+        subprocess.check_output(cmd, shell=True)
         private_key = self._getkey(tmpprivate)
         public_key  = self._getkey(tmppublic)
         digest = self._mkdigest(private_key) # digest of private key
-        timestamp = time.time() # POSIX timestamp
+        timestamp = str(time.time()) # POSIX timestamp
         self.connectdb()
-        self.curs.execute(self.insertSQL, (self.privatetable, username, key, digest, timestamp))
-        self.curs.execute(self.insertSQL, (self.publictable, username, key, digest, timestamp))
+        self.curs.execute(self.insertSQL.format(self.privatetable), (username, private_key, digest, timestamp))
+        logging.info('inserted key {0:s} into {1:s}'.format(private_key, self.privatetable))
+        self.curs.execute(self.insertSQL.format(self.publictable), (username, public_key, digest, timestamp))
+        logging.info('inserted key {0:s} into {1:s}'.format(public_key, self.publictable))
         self.disconnectdb()
         # remove the temporary files mkstemp created
-        os.unlink(tmpfile)
-        os.unlink(tmpfile+'.pub')
+        os.unlink(tmpprivate)
+        os.unlink(tmppublic)
     
     def getkeys(self, username='', private=False):
         '''
@@ -181,11 +187,13 @@ class KeyManager():
         default behaviour is to return the public key, setting private=True will return the private key
         '''
         self.connectdb()
+        results = []
         if private == True:
-            self.curs.execute(self.selectSQL, (self.privatetable, 'username', username))
+            self.curs.execute(self.selectSQL.format(self.privatetable, 'username'), (username,))
+            results = [row for row in self.curs]
         else:
-            self.curs.execute(self.selectSQL, (self.publictable, 'username', username))
-        results = [row for row in self.curs]
+            self.curs.execute(self.selectSQL.format(self.publictable, 'username'), (username,))
+            results = [row for row in self.curs]
         self.disconnectdb()
         return results
     
@@ -195,10 +203,10 @@ class KeyManager():
         WARNING: this function removes the key pair, both the private and the public keys are deleted!!!
         '''
         self.connectdb()
-        private_rows = self.curs.execute(self.deleteSQL, (self.privatetable, 'digest', digest)).rowcount
-        public_rows  = self.curs.execute(self.deleteSQL, (self.publictable, 'digest', digest)).rowcount
-        logging.info('deleted '+private_rows+' rows from '+self.privatetable+'with digest='+digest)
-        logging.info('deleted '+public_rows+' rows from'+self.publictable+'with digest='+digest)
+        private_rows = self.curs.execute(self.deleteSQL.format(self.privatetable, 'digest'), (digest,)).rowcount
+        public_rows  = self.curs.execute(self.deleteSQL.format(self.publictable, 'digest'), (digest,)).rowcount
+        logging.info('deleted {0:d} rows from {1:s} with digest={2:s}'.format(private_rows, self.privatetable, digest))
+        logging.info('deleted {0:d} rows from {1:s} with digest={2:s}'.format(public_rows, self.publictable, digest))
         self.disconnectdb()
         return (private_rows, public_rows)
     
@@ -206,12 +214,24 @@ class KeyManager():
         '''checkkey(key): check if the key exists in the db'''
         self.connectdb()
         if private==True:
-            self.cursor.execute(self.selectSQL, (self.privatetable, 'key', key))
+            self.curs.execute(self.selectSQL.format(self.privatetable, 'key'), (key,))
         else:
-            self.curs.execute(self.selectSQL, (self.publictable, 'key', key))
+            self.curs.execute(self.selectSQL.format(self.publictable, 'key'), (key,))
         results = [row for row in self.curs]
         self.disconnectdb()
         if len(results) != 0:
             return True
         else:
             return False
+        
+if __name__ == '__main__':
+    user = 'dshea'
+    km = KeyManager()
+    km.createkeys(user)
+    public = km.getkeys(user)[0][1]
+    private, digest = km.getkeys(user, private=True)[0][1:3]
+    print public
+    print private
+    print km.checkkey(public)
+    print km.checkkey(private, private=True)
+    print km.removekeypair(digest)

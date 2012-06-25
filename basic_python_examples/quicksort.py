@@ -4,6 +4,23 @@
 # This is laughably slower than the built in sort algorithm for the list data type and far uglier
 # Purely intended as an exercise to ensure my brain didn't fully atrophy decades after university ;-)
 
+'''
+Python 2.7.3 (default, Apr 20 2012, 22:44:07) 
+[GCC 4.6.3] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> execfile('quicksort.py')
+>>> quicksort
+<function quicksort at 0xb72901b4>
+>>> import random
+>>> quicksort([random.randint(1,10) for i in range(10)])
+[2, 3, 4, 6, 6, 6, 8, 9, 9, 10]
+>>> quicksort([random.randint(1,10) for i in range(10)])
+[4, 4, 4, 5, 6, 7, 7, 7, 9, 10]
+>>> quicksort([random.randint(1,10) for i in range(10)])
+[1, 2, 2, 4, 5, 6, 6, 7, 9, 9]
+>>> 
+'''
+
 def quicksort(l):
     '''quicksort(l) - sort a list l using the infamous quicksort algorithm'''
     # if the list is of length less than 2 you're done, so return the list
