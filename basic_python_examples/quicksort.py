@@ -66,7 +66,7 @@ def qsort(l):
         return []
     else:
         pivot = l[0] # Another interesting approach, simply using the head of
-                        # the list as the pivot instead of partitioning
+                     # the list as the pivot instead of partitioning
         left  = qsort([i for i in l[1:] if i < pivot])
         right = qsort([i for i in l[1:] if i >= pivot])
         return left + [pivot] + right
