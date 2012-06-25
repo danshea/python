@@ -21,7 +21,7 @@ simultaneously, and the discrete moment at which this happens is sometimes calle
 (in other words, each generation is a pure function of the preceding one). The rules continue
 to be applied repeatedly to create further generations.
 
-This version of the implmenetation cheats the infinite two-dimensional orthogonal grid requirement
+This version of the implmentation cheats the infinite two-dimensional orthogonal grid requirement
 by implementing a toroidal array.  The left/right edges wrap and the top/bottom edges wrap so that
 cells on the boundaries of the array reference cells on the opposing edges as neighbors.
 
