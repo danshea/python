@@ -39,40 +39,33 @@ def fib(n):
         return fibs[n]
 
 # we need to examine if the first 9 and last 9 digits of the fibonacci number are pandigital, let's write a helper function to verify this
-def is_pandigital(n, fn):
-    s = str(fn)
-    first_nine = s[0:9]
-    last_nine  = s[len(s)-9:]
-    # if the sum of these digits is 45 for both the first and last nine digits, then number warrants a closer look
-    # first we will "explode the digits into separate characters and convert back to integer
-    first_nine = [int(i) for i in list(first_nine)]
-    last_nine  = [int(i) for i in list(last_nine)]
-    # now we can see if they sum to 45
-    if sum(first_nine) == 45 and sum(last_nine) == 45:
-        # if there is a 0 in there move along
-        if 0 in first_nine ==False:
-            # let's verify the sum of the first nine digits is a result of a pandigital number
-            digits = range(1,10)
-            match = [0,0,0,0,0,0,0,0,0]
-            for i in first_nine:
-                match[digits.index(i)] = 1
+def is_pandigital(n):
+    sn = str(n)
+    head = [int(i) for i in sn[0:9]]
+    tail = [int(i) for i in sn[-9:]]
+    if sum(head) == 45 and sum(tail) == 45:
+        try:
+            if head.index(0) or tail.index(0):
+                return False
+        except ValueError:
+            match = [0 for i in range(9)]
+            for val in head:
+                match[val-1] = 1
             if sum(match) == 9:
-                if 0 in last_nine == False:
-                    match = [0,0,0,0,0,0,0,0,0]
-                    for i in last_nine:
-                        match[digits.index(i)] = 1
-                    if sum(match) == 9:
-                        # we have a winner!
-                        return(n,fn)
+                match = [0 for i in range(9)]
+                for val in tail:
+                    match[val -1] = 1
+                if sum(match) == 9:
+                    return True
     return False
 
 def main():
     # Now, since from the problem we are told the first fibonacci number with the first nine digits being pandigital is F2749
     # let's start at F2750 and work our way up via brute force
     k = 2750
-    while is_pandigital(k, fib(k)) == False:
+    while is_pandigital(fib(k)) == False:
         k += 1
-    print 'Solution: k = %d' % k
+    print 'Solution: k = {0}'.format(k)
 
 if __name__ == '__main__':
     main()
