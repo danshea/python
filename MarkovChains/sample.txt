@@ -1,0 +1,2 @@
+Here is some sample text. Let's analyze it and see what the frequencies are.
+Here goes nothing!
