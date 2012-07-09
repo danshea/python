@@ -60,15 +60,16 @@ class MMIX(object):
 
     def __init__(self, memsize=1024):      
         # The 256 General purpose registers
-        self.registers = dict(zip(['${0:d}'.format(i) for i in range(256)], [0 for i in range(256)]))
+        self.registers = dict(zip(['${0:d}'.format(i) for i in range(256)], ['0'*self.OCTA for i in range(256)]))
 
         # The 32 Special purpose registers
         self.sregisters = dict(zip(['rA', 'rB', 'rC', 'rD', 'rE', 'rF', 'rG', 'rH', 'rI', 'rJ', 'rK', 'rL', 'rM',
                                     'rN', 'rO', 'rP', 'rQ', 'rR', 'rS', 'rT', 'rU', 'rV', 'rW', 'rX', 'rY', 'rZ',
-                                    'rBB', 'rTT', 'rXX', 'rYY', 'rZZ'], [0 for i in range(32)]))
+                                    'rBB', 'rTT', 'rXX', 'rYY', 'rZZ'], ['0'*self.OCTA for i in range(32)]))
 
         # Memory address space
-        self.memory = [0 for i in range(memsize)]
+        self.memsize = memsize
+        self.memory = ['0'*self.BYTE for i in range(memsize)]
 
     '''
     Signed numbers using two's complement notation. (The number's one's complement plus one)
@@ -264,11 +265,21 @@ class MMIX(object):
         if size not in [self.BYTE, self.WYDE, self.TETRA, self.OCTA]:
             raise ValueError('Alignment size must be of size BYTE({0}) WYDE({1}) TETRA({2}) OCTA({3})'.format(self.BYTE, self.WYDE, self.TETRA, self.OCTA))
 
-        return address - address % size
+        return address - (address % (size//self.BYTE))
+
+    def compute_address(self, Y, Z):
+        if Y not in self.registers:
+            raise ValueError('{0} is not a valid register.'.format(Y))
+        if Z not in self.registers:
+            raise ValueError('{0} is not a valid register.'.format(Z))
+        address = (self.udvalue(self.registers[Y], self.OCTA) + self.udvalue(self.registers[Z], self.OCTA)) % 2**self.OCTA
+        if address >= self.memsize:
+            raise ValueError('{0} exceeds maximum memory address size of {1}.'.format(address, self.memsize-1))
+        return address
     
     '''
     Loading values.
-    '''
+    '''    
     def load(self, target, address, size=OCTA, mode=UNSIGNED):
         '''
         load into target value from address aligned to size for the given mode
