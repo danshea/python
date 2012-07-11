@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import codecs
 import csv
 import datetime
 import urllib.request
@@ -33,7 +34,11 @@ def fetch_data(symbol='IBM'):
 
     # data = [row for row in csv.reader(map(bytes.decode, urllib.request.urlopen(urlstring), ('iso-8859-1' for i in iter(int,1))))]
     # can be more clearly written as 
-    data = [row for row in csv.reader(map(bytes.decode, urllib.request.urlopen(urlstring), ('iso-8859-1' for i in iter(lambda:0,1))))]
+    # data = [row for row in csv.reader(map(bytes.decode, urllib.request.urlopen(urlstring), ('iso-8859-1' for i in iter(lambda:0,1))))]
+
+    # turns out the codecs library offers us this functionality in a cleaner, more pythonic fashion
+    data = [row for row in csv.reader(codecs.iterdecode(urllib.request.urlopen(urlstring), 'iso-8859-1'))]
+    
     # since we define a lambda statement that always returns 0, one might not know int() always returns 0 and what if that behaviour
     # were to change in later versions of python?
 
