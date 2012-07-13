@@ -27,11 +27,39 @@ class BoardObject(object):
     def draw(self):
         return pygame.draw.polygon
 
+class Bullet(BoardObject):
+    SPEED = 5.0
+    TTL = 75
+    def __init__(self, xmax, ymax, xpos, ypos, speed, bearing):
+        BoardObject.__init__(self, xmax, ymax, xpos, ypos, speed+Bullet.SPEED, bearing)
+        self.ttl = Bullet.TTL
+        self.orientation = bearing
+
+    def update(self):
+        BoardObject.update(self)
+        self.ttl -= 1
+
+    def points(self):
+        front = Vector.Vector(1, self.orientation)
+        lr    = Vector.Vector(1, (self.orientation-120) % 360)
+        rr    = Vector.Vector(1, (self.orientation+120) % 360)
+        return (((self.xpos+front.x), (self.ypos+front.y)),
+                ((self.xpos+lr.x), (self.ypos+lr.y)),
+                ((self.xpos+rr.x), (self.ypos+rr.y)),)
+
+class Asteroid(BoardObject):
+    SPEED = 1
+    SPAWN_SIZE = 50
+    def __init__(self, xmax, ymax, xpos, ypos, speed, bearing):
+        BoardObject.__init__(self, xmax, ymax, xpos, ypos, speed, bearing)
+    
+
 class Ship(BoardObject):
     THRUST = 0.5
     ROTATE = 10
     def __init__(self, xmax, ymax, xpos, ypos, speed, bearing):
         BoardObject.__init__(self, xmax, ymax, xpos, ypos, speed, bearing)
+        self.weapon = Bullet
 
     def thrust(self):
         self.heading = self.heading + Vector.Vector(Ship.THRUST, self.orientation)
@@ -56,12 +84,17 @@ class Ship(BoardObject):
                 ((self.xpos+rear.x), (self.ypos+rear.y)),
                 ((self.xpos+right_rear.x), (self.ypos+right_rear.y)),)
 
+    def shoot(self):
+        speed = Vector.Vector(0, self.orientation) + self.heading
+        return self.weapon(self.xmax, self.ymax, self.xpos, self.ypos, speed.r, self.orientation)
+
 if __name__ == '__main__':
     pygame.init()
     fpsClock = pygame.time.Clock()
     pygame.display.set_caption('Asteroids')
     BLACK = pygame.Color(0,0,0)
     WHITE = pygame.Color(255,255,255)
+    RED = pygame.Color(255,0,0)
     xmax = 640
     ymax = 480
     screen = pygame.display.set_mode((xmax,ymax))
@@ -75,9 +108,17 @@ if __name__ == '__main__':
     while True:
         screen.fill(BLACK)
 
+        index = 0
         for i in Board:
             i.update()
-            i.draw()(screen, WHITE, i.points(), 1)
+            if type(i) is Bullet:
+                if i.ttl > 0:
+                    i.draw()(screen, RED, i.points(), 1)
+                else:
+                    Board.pop(index)
+            else:
+                i.draw()(screen, WHITE, i.points(), 1)
+            index += 1
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -92,5 +133,7 @@ if __name__ == '__main__':
                     myShip.thrust()
                 elif event.key == pygame.K_DOWN:
                     myShip.reversethrust()
+                elif event.key == pygame.K_SPACE:
+                    Board.append(myShip.shoot())
         pygame.display.update()
         fpsClock.tick(60)
