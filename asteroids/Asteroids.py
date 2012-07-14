@@ -49,10 +49,24 @@ class Bullet(BoardObject):
 
 class Asteroid(BoardObject):
     SPEED = 1
-    SPAWN_SIZE = 50
+    SPAWN_SIZE = 40
     def __init__(self, xmax, ymax, xpos, ypos, speed, bearing):
         BoardObject.__init__(self, xmax, ymax, xpos, ypos, speed, bearing)
-    
+        self.size = Asteroid.SPAWN_SIZE
+        self.heading = Vector.Vector(random.randint(1,5)/2.0, random.randint(0,359))
+        self.orientation = random.randint(0,359)
+
+    def points(self):
+        p1    = Vector.Vector(self.size, self.orientation)
+        p2    = Vector.Vector(self.size, (self.orientation+72.5) % 360)
+        p3    = Vector.Vector(self.size, (self.orientation+145) % 360)
+        p4    = Vector.Vector(self.size, (self.orientation+217.5) % 360)
+        p5    = Vector.Vector(self.size, (self.orientation+290) % 360)
+        return (((self.xpos+p1.x), (self.ypos+p1.y)),
+                ((self.xpos+p2.x), (self.ypos+p2.y)),
+                ((self.xpos+p3.x), (self.ypos+p3.y)),
+                ((self.xpos+p4.x), (self.ypos+p4.y)),
+                ((self.xpos+p5.x), (self.ypos+p5.y)),)
 
 class Ship(BoardObject):
     THRUST = 0.5
@@ -104,6 +118,8 @@ if __name__ == '__main__':
     myShip = Ship(xmax, ymax, xcenter, ycenter, 0.0, 0.0)
     Board = list()
     Board.append(myShip)
+    for i in xrange(5):
+        Board.append(Asteroid(xmax, ymax, random.randint(0,xmax), random.randint(0, ymax), 0.0, 0.0))
 
     while True:
         screen.fill(BLACK)
