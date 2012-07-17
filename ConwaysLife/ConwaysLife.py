@@ -27,17 +27,23 @@ cells on the boundaries of the array reference cells on the opposing edges as ne
 
 The gui is implmented in wxPython for display of the simulation.
 '''
+
+import os
+import os.path
 import time
 import sys
 import random
 import wx
 
 class Life():
-    def __init__(self, nrow=50, ncol=50):
+    def __init__(self, nrow=50, ncol=50, initial_grid = None):
         self.nrow = nrow
         self.ncol = ncol
         self.size = self.nrow * self.ncol
-        self.current_grid = [random.randint(0,1) for i in xrange(self.size)]
+        if initial_grid == None:
+            self.current_grid = [random.randint(0,1) for i in xrange(self.size)]
+        else:
+            self.current_grid = initial_grid
         self.next_grid = [0 for i in xrange(self.size)]
         self.generation = 0
     
@@ -116,7 +122,7 @@ class LifeApp(wx.Frame):
     ID_TIMER = 1
     speed = 1000
     
-    def __init__(self, parent, title, xsize=500, ysize=500, cell_size=10):   
+    def __init__(self, parent, title, xsize=500, ysize=500, cell_size=10, initial_grid = None):   
         super(LifeApp, self).__init__(parent, title = title, size = (xsize, ysize))
         self.timer = wx.Timer(self, LifeApp.ID_TIMER)
         
@@ -124,7 +130,7 @@ class LifeApp(wx.Frame):
         self.Bind(wx.EVT_TIMER, self.OnTimer, id=LifeApp.ID_TIMER)
 
         self.cell_size = cell_size
-        self.LifeSim = Life(xsize/self.cell_size, ysize/self.cell_size)
+        self.LifeSim = Life(xsize/self.cell_size, ysize/self.cell_size, initial_grid)
 
         self.start()
 
@@ -156,7 +162,25 @@ class LifeApp(wx.Frame):
             dc.DrawRectangle(self.cell_size*j, self.cell_size*i, self.cell_size, self.cell_size)
             index += 1
 
+def usage():
+    print 'usage: {0} [filename]'.format(sys.argv[0])
+    sys.exit(0)
+
 if __name__ == "__main__":
     app = wx.App()
-    lifeapp = LifeApp(None, title = 'Conway\'s Life')
+    if len(sys.argv) == 2:
+        if os.path.isfile(sys.argv[1]):
+            with open(sys.argv[1], 'r') as fh:
+                grid = ''
+                for line in fh:
+                    grid += line.strip()
+                grid = eval(grid)
+            if type(grid) is list:
+                lifeapp = LifeApp(None, title = 'Conway\'s Life', initial_grid = grid)
+            else:
+                usage()
+    elif len(sys.argv) == 1:
+        lifeapp = LifeApp(None, title = 'Conway\'s Life')
+    else:
+        usage()
     app.MainLoop()    
