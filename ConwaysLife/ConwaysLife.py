@@ -101,7 +101,8 @@ class Life():
                 if sum(neighbors) == 3:
                     self.next_grid[index] = 1
             index += 1
-        self.current_grid = self.next_grid
+        # mistakenly was pointing the current_grid to the next grid instead of making a copy
+        self.current_grid = self.next_grid[:]
         self.generation += 1
     
     def show_state(self):
