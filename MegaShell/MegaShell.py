@@ -15,6 +15,7 @@ import logging
 import os
 import os.path
 import re
+import shlex
 import subprocess
 import sys
 import time
@@ -84,7 +85,7 @@ class MegaShell(cmd.Cmd):
     def _run(self, cmd):
         self.logger.debug('Executing: {}'.format(cmd))
         try:
-            output = subprocess.check_output(cmd)
+            output = subprocess.check_output(shlex.split(cmd))
             return output
         except subprocess.CalledProcessError as e:
             self.logger.error('{}'.format(e))
@@ -141,8 +142,8 @@ class MegaShell(cmd.Cmd):
         if not self._noexec:
             output = self._run(cmd)
             if output:
-                adapters = re.findall('Adapter #\d+')
-                descriptions = re.findall('Product Name.+')
+                adapters = re.findall('Adapter #\d+', output)
+                descriptions = re.findall('Product Name.+', output)
                 for adapter, description in zip(adapters, descriptions):
                     adapter = adapter.strip()
                     description = description.strip()
