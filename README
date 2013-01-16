@@ -1,15 +1,7 @@
-Date: 2012-06-21
+Date: 2013-01-15
 
 Author: djs
 
-Description: This git repository is a collection of various python code I have written or am currently writing.  It is mostly for personal consumption, although if potential employers want to take a peek and see what I work on in my spare time, that is ok by me.  Anyone wishing to contact me regarding this repository either for questions, comments or suggestions to improve my code are more than welcome to reach me at:
+Description: This git repository is a collection of various python code I have written or am currently writing.  It is mostly for personal consumption, although anyone may take a peek and see what I work on in my spare time, that is ok by me.  Anyone wishing to contact me regarding this repository either for questions, comments or suggestions to improve my code are more than welcome to reach me at:
 
 daniel(DOT)john(DOT)shea(AT)gmail(DOT)com
-
-All code is currently being written and run on Ubuntu 12.04 LTS using 
-
-Python 2.7.3 (default, Apr 20 2012, 22:44:07) 
-[GCC 4.6.3] on linux2
-
-From /proc/cpuinfo
-model name  : Intel(R) Core(TM)2 Quad  CPU   Q9300  @ 2.50GHz
