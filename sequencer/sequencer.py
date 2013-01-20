@@ -24,6 +24,9 @@
 # out-degree, and all of its vertices with nonzero degree belong to a single
 # connected component of the underlying undirected graph.
 
+import copy
+import sys
+
 class Vertice(object):
     def __init__(self, key, in_edges=None, out_edges=None):
         '''Vertice(key, in_edges, out_edges) - given a key and a list of
@@ -39,6 +42,7 @@ class Vertice(object):
             self.out_edges = list()
         self.in_degree = len(self.in_edges)
         self.out_degree = len(self.out_edges)
+        self.offset = dict()
 
     def append_out_edge(self, edge):
         self.out_edges.append(edge)
@@ -106,8 +110,9 @@ class DeBruijn(object):
                 overlap = self._overlap(a,b)
                 # if there is overlap, add an out_edge to vertice a
                 # and an in_edge to vertice b
-                if overlap > -1:
+                if overlap > 0:
                     self.vertices[a].append_out_edge((b,overlap))
+                    self.vertices[a].offset[b] = overlap
                     self.vertices[b].append_in_edge((a,overlap))
 
     def _is_eulerian(self):
@@ -139,3 +144,53 @@ class DeBruijn(object):
             else:
                 return False
         return True
+
+    def _walk(self, start=0):
+        '''_walk(start=0) - will construct an Eulerian Path (when possible)
+           starting at some vertex in the list of vertices (indexed by start)
+           otherwise, construct an Eulerian Trail if possible.  Return None if
+           the graph is not Eulerian.'''
+        # Determine our starting point or return None if non-Eulerian
+        if self._is_eulerian() == True:
+            # We will operate on a copy of the graph since we do destructive
+            # modification to calculate the walk
+            vertices = copy.deepcopy(self.vertices)
+            # We can pick any vertex to start from
+            current = vertices[vertices.keys()[start]]
+        elif self._is_eulerian_trail() == True:
+            # We will operate on a copy of the graph since we do destructive
+            # modification to calculate the walk
+            vertices = copy.deepcopy(self.vertices)
+            # We must use the vertex with the largest out-degree
+            max_out_degree = max([(vertices[k].key,vertices[k].out_degree) for k in vertices],key=lambda (a,b): b)[0]
+            current = vertices[max_out_degree]
+        else:
+            return None
+        # Create an empty stack
+        stack = list()
+        # Create an empty circuit
+        circuit = list()
+
+        while True:
+            if current.out_edges == []:
+                circuit.insert(0,current)
+                current = stack.pop(0)
+            else:
+                stack.insert(0,current)
+                current = vertices[current.out_edges.pop(0)[0]]
+            if current.out_edges == [] and stack == []:
+                circuit.insert(0,current)
+                break
+        return circuit
+
+    def sequence(self):
+        '''sequence() - return the reconstructed sequence or None if no
+           reconstruction is possible'''
+        walk = [v.key for v in self._walk()]
+        prev = walk[0]
+        sys.stdout.write('{}'.format(prev))
+        for k in walk[1:]:
+            #print '{}-->{}: {}'.format(prev, k, self.vertices[prev].offset[k])
+            sys.stdout.write('{}'.format(k[len(k)-self.vertices[prev].offset[k]:]))
+            prev = k
+        sys.stdout.write('\n')
