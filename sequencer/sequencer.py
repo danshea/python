@@ -186,11 +186,15 @@ class DeBruijn(object):
     def sequence(self):
         '''sequence() - return the reconstructed sequence or None if no
            reconstruction is possible'''
-        walk = [v.key for v in self._walk()]
-        prev = walk[0]
-        sys.stdout.write('{}'.format(prev))
-        for k in walk[1:]:
-            #print '{}-->{}: {}'.format(prev, k, self.vertices[prev].offset[k])
-            sys.stdout.write('{}'.format(k[len(k)-self.vertices[prev].offset[k]:]))
-            prev = k
-        sys.stdout.write('\n')
+        W = self._walk()
+        if W:
+            walk = [v.key for v in W]
+            prev = walk[0]
+            sys.stdout.write('{}'.format(prev))
+            for k in walk[1:]:
+                #print '{}-->{}: {}'.format(prev, k, self.vertices[prev].offset[k])
+                sys.stdout.write('{}'.format(k[len(k)-self.vertices[prev].offset[k]:]))
+                prev = k
+            sys.stdout.write('\n')
+        else:
+            sys.stdout.write('No sequence possible, graph is not Eulerian.')
