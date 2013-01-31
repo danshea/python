@@ -92,6 +92,126 @@ class MegaShell(cmd.Cmd):
             return None
 
     # Commands available to the user in MegaShell
+    def do_SetWriteBack(self, args):
+        '''SetWriteBack drive adapter
+        Set WriteBack for drive on adapter
+        '''
+        self.logger.debug('SetWriteBack called.')
+        args = args.split()
+        if len(args) != 2:
+            sys.stdout.write('usage: SetWriteBack drive adapter\n')
+            self.logger.debug('SetWriteBack called with improper arguments')
+            pass
+        else:
+            drive,adapter = args
+            cmd = self.configuration['setwriteback'].format(drive=drive,adapter=adapter)
+            cmd = self._cmd_prefix + ' ' + cmd
+            if not self._noexec:
+                output = self._run(cmd)
+                if output:
+                    sys.stdout.write('{}'.format(output))
+                    self.logger.debug('Output: {}'.format(output))
+                else:
+                    self.logger.debug('Output:')
+            else:
+                self.logger.debug('Command: {}'.format(cmd))
+
+    def do_SetReadAhead(self, args):
+        '''SetReadAhead drive adapter
+        Set ReadAhead for drive on adapter
+        '''
+        self.logger.debug('SetReadAhead called.')
+        args = args.split()
+        if len(args) != 2:
+            sys.stdout.write('usage: SetReadAhead drive adapter\n')
+            self.logger.debug('SetReadAhead called with improper arguments')
+            pass
+        else:
+            drive,adapter = args
+            cmd = self.configuration['setreadahead'].format(drive=drive,adapter=adapter)
+            cmd = self._cmd_prefix + ' ' + cmd
+            if not self._noexec:
+                output = self._run(cmd)
+                if output:
+                    sys.stdout.write('{}'.format(output))
+                    self.logger.debug('Output: {}'.format(output))
+                else:
+                    self.logger.debug('Output:')
+            else:
+                self.logger.debug('Command: {}'.format(cmd))
+
+    def do_SetDirectAccess(self, args):
+        '''SetDirectAccess drive adapter
+        Set DirectAccess for drive on adapter
+        '''
+        self.logger.debug('SetDirectAccess called.')
+        args = args.split()
+        if len(args) != 2:
+            sys.stdout.write('usage: SetDirectAccess drive adapter\n')
+            self.logger.debug('SetDirectAccess called with improper arguments')
+            pass
+        else:
+            drive,adapter = args
+            cmd = self.configuration['setdirectaccess'].format(drive=drive,adapter=adapter)
+            cmd = self._cmd_prefix + ' ' + cmd
+            if not self._noexec:
+                output = self._run(cmd)
+                if output:
+                    sys.stdout.write('{}'.format(output))
+                    self.logger.debug('Output: {}'.format(output))
+                else:
+                    self.logger.debug('Output:')
+            else:
+                self.logger.debug('Command: {}'.format(cmd))
+    
+    def do_SetWriteCaching(self, args):
+        '''SetWriteCaching drive adapter
+        Set WriteCaching for drive on adapter
+        '''
+        self.logger.debug('SetWriteCaching called.')
+        args = args.split()
+        if len(args) != 2:
+            sys.stdout.write('usage: SetWriteCaching drive adapter\n')
+            self.logger.debug('SetWriteCaching called with improper arguments')
+            pass
+        else:
+            drive,adapter = args
+            cmd = self.configuration['setwritecaching'].format(drive=drive,adapter=adapter)
+            cmd = self._cmd_prefix + ' ' + cmd
+            if not self._noexec:
+                output = self._run(cmd)
+                if output:
+                    sys.stdout.write('{}'.format(output))
+                    self.logger.debug('Output: {}'.format(output))
+                else:
+                    self.logger.debug('Output:')
+            else:
+                self.logger.debug('Command: {}'.format(cmd))
+   
+    def do_EnableDriveCache(self, args):
+        '''EnableDriveCache drive adapter
+        Enable the Drive Cache for drive on adapter
+        '''
+        self.logger.debug('EnableDriveCache called.')
+        args = args.split()
+        if len(args) != 2:
+            sys.stdout.write('usage: EnableDriveCache drive adapter\n')
+            self.logger.debug('EnableDriveCache called with improper arguments')
+            pass
+        else:
+            drive,adapter = args
+            cmd = self.configuration['enabledrivecache'].format(drive=drive,adapter=adapter)
+            cmd = self._cmd_prefix + ' ' + cmd
+            if not self._noexec:
+                output = self._run(cmd)
+                if output:
+                    sys.stdout.write('{}'.format(output))
+                    self.logger.debug('Output: {}'.format(output))
+                else:
+                    self.logger.debug('Output:')
+            else:
+                self.logger.debug('Command: {}'.format(cmd))
+    
     def do_AlarmOff(self, adapter):
         '''AlarmOff [adapter]
         Turn the alarm off for the adapter, if adapter is not specified,
