@@ -48,7 +48,7 @@ def main():
         with configfile:
             SECTION = 'Configuration'
             config = ConfigParser.ConfigParser()
-            config.read(configfile)
+            config.readfp(configfile)
             root = config.get(SECTION, 'root')
             sourcedirectory = os.path.join(root, config.get(SECTION, 'sourcedirectory'))
             sourcebasename = config.get(SECTION, 'sourcebasename')
@@ -79,8 +79,7 @@ def main():
     
     # Initialize the logger
     logfile += '-' + time.strftime('%Y%m%d%H%M%S', time.localtime()) + '.log'
-    logging.basicConfig(filename=os.path.join(logdir,logfile), level=logging.DEBUG)
-    logging.basicConfig(format='%(asctime)s %(message)s')
+    logging.basicConfig(filename=os.path.join(logdir,logfile), level=logging.DEBUG, format='%(asctime)s %(message)s')
     logging.debug('Logger Initialized.')
     
     # Parse the command line and ensure we get the arguments we expect and that they are valid
@@ -129,7 +128,7 @@ def main():
     try:
         if nodetype == 'master':
             subprocess.check_call(shlex.split(master_flags))
-        if nodetype == 'chunkserver':
+        elif nodetype == 'chunkserver':
             subprocess.check_call(shlex.split(chunk_flags))
         else:
             logging.fatal('nodetype = {0:s} this should never happen!  nodetype should be one of master or chunkserver.'.format(nodetype))
