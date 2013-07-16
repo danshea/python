@@ -43,6 +43,7 @@ def main():
     except IOError as detail:
         sys.stderr.write('{0:s} does not exist or is not readable.'.format(CONFIG))
         sys.stderr.write(detail)
+        sys.stdout.write('changed=false\n')
         sys.exit(1)
     else:
         with configfile:
@@ -64,7 +65,8 @@ def main():
     
     # Make sure the root exists, if it doesn't we have some big problems!
     if not os.path.isdir(root):
-        sys.stderr.write('{0:s} does not exist, check the confguration file and the installation path.')
+        sys.stderr.write('{0:s} does not exist, check the confguration file and the installation path.\n')
+        sys.stdout.write('changed=false\n')
         sys.exit(911)
     
     # Ensure that logdir, sourcedirectory exist, create them if necessary
@@ -75,6 +77,7 @@ def main():
         os.mkdir(os.path.join(root, sourcedirectory))
         sys.stderr.write('{0:s} did not exist, creating, this run will fail due to source file not being present.'.format(os.path.join(root, sourcedirectory)))
         sys.stderr.write('Please place the source file into {0:s} and re-run this command.'.format(os.path.join(root, sourcedirectory)))
+        sys.stdout.write('changed=false\n')
         exit(2)
     
     # Initialize the logger
@@ -93,6 +96,7 @@ def main():
         sourcefilename = sourcebasename + version + sourcefile_extension
     except Exception as detail:
         logging.fatal(detail)
+        sys.stdout.write('changed=false\n')
         sys.exit(3)
     
     logging.info('Command line arguments parsed.')
@@ -100,7 +104,8 @@ def main():
     # Ensure the sourcefile exists
     if not os.path.isfile(os.path.join(sourcedirectory, sourcefilename)):
         logging.fatal('{0:s} does not exist.'.format(os.path.join(sourcedirectory, sourcefilename)))
-        sys.stderr.write('{0:s} does not exist.'.format(os.path.join(sourcedirectory, sourcefilename)))
+        sys.stderr.write('{0:s} does not exist.\n'.format(os.path.join(sourcedirectory, sourcefilename)))
+        sys.stdout.write('changed=false\n')
         sys.exit(2)
     
     # untar the source file
@@ -109,8 +114,9 @@ def main():
         sourcetar.extractall(sourcedirectory)
     except tarfile.TarError as detail:
         logging.fatal('Error retrieving files from {0:s}'.format(os.path.join(sourcedirectory, sourcefilename)))
-        sys.stderr.write('Error retrieving files from {0:s}'.format(os.path.join(sourcedirectory, sourcefilename)))
+        sys.stderr.write('Error retrieving files from {0:s}\n'.format(os.path.join(sourcedirectory, sourcefilename)))
         logging.fatal(detail)
+        sys.stdout.write('changed=false\n')
         sys.exit(4)
     
     logging.info('untar of source file complete.')
@@ -118,7 +124,8 @@ def main():
     # One last check to make sure the subdirectory we expect has been created, if it has, set the CWD to that directory
     if not os.path.isdir(os.path.join(sourcedirectory,sourcebasename+version)):
         logging.fatal('{0:s} is not a valid directory.  Please check the source tarfile was properly extracted.'.format(os.path.join(sourcedirectory,sourcebasename+version)))
-        sys.stderr.write('{0:s} is not a valid directory.  Please check the source tarfile was properly extracted.'.format(os.path.join(sourcedirectory,sourcebasename+version)))
+        sys.stderr.write('{0:s} is not a valid directory.  Please check the source tarfile was properly extracted.\n'.format(os.path.join(sourcedirectory,sourcebasename+version)))
+        sys.stdout.write('changed=false\n')
         sys.exit(5)
     else:
         os.chdir(os.path.join(sourcedirectory,sourcebasename+version))
@@ -133,11 +140,13 @@ def main():
         else:
             logging.fatal('nodetype = {0:s} this should never happen!  nodetype should be one of master or chunkserver.'.format(nodetype))
             sys.stderr.write('nodetype = {0:s} this should never happen!  nodetype should be one of master or chunkserver.'.format(nodetype))
+            sys.stdout.write('changed=false\n')
             sys.exit(912)
     except subprocess.CalledProcessError:
         logging.fatal('configure returned non-zero exit status')
-        sys.stderr('configure returned non-zero exit status')
+        sys.stderr('configure returned non-zero exit status\n')
         logging.fatal(subprocess.CalledProcessError.output)
+        sys.stdout.write('changed=false\n')
         sys.exit(6)
     
     logging.info('Configuration complete.')
@@ -147,8 +156,9 @@ def main():
         subprocess.check_call(shlex.split('make'))
     except subprocess.CalledProcessError:
         logging.fatal('make returned non-zero exit status')
-        sys.stderr.write('make returned non-zero exit status')
+        sys.stderr.write('make returned non-zero exit status\n')
         logging.fatal(subprocess.CalledProcessError.output)
+        sys.stdout.write('changed=false\n')
         sys.exit(7)
     
     logging.info('Compilation complete.')
@@ -158,8 +168,9 @@ def main():
         subprocess.check_call(shlex.split('make install'))
     except subprocess.CalledProcessError:
         logging.fatal('make install returned non-zero exit status')
-        sys.stderr.write('make install returned non-zero exit status')
+        sys.stderr.write('make install returned non-zero exit status\n')
         logging.fatal(subprocess.CalledProcessError.output)
+        sys.stdout.write('changed=false\n')
         sys.exit(8)
     
     logging.info('Installation complete.')
@@ -168,6 +179,10 @@ def main():
     os.chdir(root)
     logging.info('CWD is now {0:s}'.format(root))
     logging.info('Done.')
+    
+    # Tell salt the state has been succesfully changed
+    # See http://docs.saltstack.com/ref/states/all/salt.states.cmd.html for details
+    sys.stdout.write('changed=true\n')
     sys.exit(0)
 
 if __name__ == '__main__':
