@@ -1,4 +1,5 @@
 import ConfigParser
+import logging
 import os
 import paramiko
 import random
@@ -12,17 +13,30 @@ import time
 class ChaosMoose(object):
     def __init__(self, mastername='moose1-master.med.harvard.edu'):
         """Initialize the Chaos Moose! Optionally pass it the shared name of master nodes."""
+        # Initialize Logging
+        logfile = '.'.join(['-'.join(['ChaosMoose', time.strftime('%Y%m%d%H%M%S')]), 'log'])
+        logging.basicConfig(filename=logfile, level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
         self.mastername = mastername
+        logging.debug('mastername = {0:s}'.format(mastername))
         # Instantiate a paramiko ssh object
         self.ssh = paramiko.SSHClient()
+        logging.debug('instantiated paramiko SSHClient object')
         # Tell the paramiko object to accept unknown keys
         self.ssh.set_mising_host_key_policy(paramiko.AutoAddPolicy())
+        logging.debug('set paramiko host key policy to AutoAddPolicy')
 
     def ssh_command(self, host, command):
+        logging.info('ssh_command({0:s}, {1:s})'.format(host, command))
         self.ssh.connect(host)
+        logging.debug('Connected to {0:s}'.format(host))
         stdin, stdout, stderr = self.ssh.exec_command(command)
+        output = stdout.readlines()
+        error = stdout.readlines()
+        logging.debug('stdout: {0:s}'.format(''.join(output)))
+        logging.debug('stderr: {0:s}'.format(''.join(error)))
         self.ssh.close()
-        return (stdin,stdout,stderr)
+        logging.debug('Session to {0:s} closed'.format(host))
+        return output
 
     def current_leader(self):
         """Return host and port tuple of the current elected leader of the master nodes or (None, None) if there is no current leader."""
@@ -30,8 +44,7 @@ class ChaosMoose(object):
         options = ' '.join(['-h', self.mastername]) # To be moved to a configuration file
         command = ' '.join([executable, options])
         # ssh to one of the masters to find the leader
-        stdin, stdout, stderr = self.ssh_command(self.mastername, command)
-        output = stdout.readlines()
+        output = self.ssh_command(self.mastername, command)
         leader = None
         port = None
         for line in output:
@@ -46,24 +59,46 @@ class ChaosMoose(object):
     def _clean_kill(self, leader, port):
         """Kill the leader via a clean shutdown, wait a bit and then restore the service."""
         executable = '/usr/sbin/mfsmaster' # To be moved to a configuration file
-        options = 'stop'                   # To be moved to a configuration file
-        command = ' '.join([executable, options])
-        stdin, stdout, stderr = self.ssh_command(leader, command)
-        self.random_sleep()
-        options = 'start'
-        command = ' '.join([executable, options])
-        stdin, stdout, stderr = self.ssh_command(leader, command)
+        try:
+            options = 'stop'                   # To be moved to a configuration file
+            command = ' '.join([executable, options])
+            output = self.ssh_command(leader, command)
+            self.random_sleep()
+        except Exception as e:
+            sys.stderr.write(e)
+        finally:
+            # Check if the mfsmaster process is down, if it is down, restart it
+            try:
+                options = 'test'
+                command = ' '.join([executable, options])
+                output = self.ssh_command(leader, command)
+                for line in output:
+                    match = re.search('mfsmaster is not running')
+                    if match:
+                        options = 'start'
+                        command = ' '.join([executable, options])
+                        output = self.ssh_command(leader, command)
+            except Exception as e:
+                sys.stderr.write(e)
 
     def _network_outage(self, leader, port):
         """Kill the leader by simulating a network outage, wait a bit and then restore the network."""
-        executable = '/sbin/ifdown' # To be moved to a configuration file
-        options = 'eth0'            # To be moved to a configuration file
-        command = ' '.join([executable, options])
-        stdin, stdout, stderr = self.ssh_command(leader, command)
-        self.random_sleep()
-        executable = '/sbin/ifup' # To be moved to a configuration file
-        command = ' '.join([executable, options])
-        stdin, stdout, stderr = self.ssh_command(leader, command)
+        try:
+            executable = '/sbin/ifdown' # To be moved to a configuration file
+            options = 'eth0'            # To be moved to a configuration file
+            command = ' '.join([executable, options])
+            output = self.ssh_command(leader, command)
+            self.random_sleep()
+        except Exception as e:
+            sys.stderr.write(e)
+        finally:
+            # The interface should always be brought back up, no matter what
+            try:
+                executable = '/sbin/ifup' # To be moved to a configuration file
+                command = ' '.join([executable, options])
+                output = self.ssh_command(leader, command)
+            except Exception as e:
+                sys.stderr.write(e)
     
     '''End of methods of execution'''
     
