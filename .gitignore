@@ -1,1 +1,3 @@
+mfs_tests/*.pyc
+mfs_tests/log/*.log
 MegaShell/log/*.log
