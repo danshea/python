@@ -51,6 +51,14 @@ class ChaosMoose(object):
         leader = None
         port = None
         for line in output:
+            # If we encounter a DEAD master node, return (None, None) this should avoid inadvertently killing
+            # more than one master node in the event that a master fails to recover, log the dead master's ip
+            # in the log file
+            deadmatch = re.search('DEAD', line)
+            if deadmatch:
+                leader,port = match.string.split(' : ')[0].split()[1].strip('(').strip(')').split(':')
+                logging.debug('master node {0:s}:{1:s} is DEAD'.format(leader, port))
+                return (None, None)
             match = re.search('LEADER', line)
             if match:
                 # strip off extraneous bits, leaving us with the ip and the port of the master node
