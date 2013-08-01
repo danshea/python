@@ -56,7 +56,7 @@ class ChaosMoose(object):
             # in the log file
             deadmatch = re.search('DEAD', line)
             if deadmatch:
-                leader,port = match.string.split(' : ')[0].split()[1].strip('(').strip(')').split(':')
+                leader,port = deadmatch.string.split(' : ')[0].split()[1].strip('(').strip(')').split(':')
                 logging.debug('master node {0:s}:{1:s} is DEAD'.format(leader, port))
                 return (None, None)
             match = re.search('LEADER', line)
