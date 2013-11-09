@@ -3,7 +3,7 @@
 '''
 Author: Dan Shea
 Date: 2013-11-08
-Description: Illustrative examples of sequence alignment
+Description: Illustrative examples of computing sequence similarity
 
 hamming_distance(a, b):
 The Hamming distance between two strings of equal length is the number of
@@ -59,18 +59,18 @@ def levenshtein_distance(a, b):
         return len(a)
     
     # create two working lists of integer distances
-    # initialize l1 as the edit distance for an empty a
-    l1 = [i for i in xrange(len(b)+1)]
-    # initialize l2 to be the same size as l1
-    l2 = [None for i in xrange(len(b)+1)]
+    # initialize list_0 as the edit distance for an empty a
+    list_0 = [i for i in xrange(len(b)+1)]
+    # initialize list_1 to be the same size as list_0
+    list_1 = [None for i in xrange(len(b)+1)]
     
     for i in xrange(len(a)):
         # edit distance is delete (i+1) chars from a to match empty b
-        l2[i] = i+1
+        list_1[i] = i+1
         #use formula to fill in the rest of the row
         for j in xrange(len(b)):
             cost = 0 if a[i] == b[j] else 1
-            l2[j+1] = min(l2[j]+1, l1[j+1]+1, l1[j]+cost)
-        # copy l2 (current row) to l1 (previous row) for next iteration
-        l1 = l2[:]
-    return(l2[len(b)])
+            list_1[j+1] = min(list_1[j]+1, list_0[j+1]+1, list_0[j]+cost)
+        # copy list_1 (current row) to list_0 (previous row) for next iteration
+        list_0 = list_1[:]
+    return(list_1[len(b)])
