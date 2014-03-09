@@ -61,7 +61,7 @@ def createCsv(outfile, records):
                 series = record.entity_id
             elif re.match('SAMPLE', record.entity_type, re.IGNORECASE) != None:            
                 #csvwriter.writerow(record.col_defs.keys())
-                for row in record.table_rows:
+                for row in record.table_rows[1:]:
                     csvwriter.writerow([series, record.entity_id] + row)
     return 0
 
