@@ -99,6 +99,8 @@ def createTables(outfile, records):
             
             # create a parameter string based on the columns
             column_names = record.col_defs.keys()
+            # put quotes around the column names
+            column_names = ['\'{0:s}\''.format(col_name) for col_name in column_names]
             column_string = ','.join(['{{{0:d}:s}}'.format(i) for i in range(len(column_names))])
             # create a TABLE with the name entity_type
             # Since we are not allowed to parameterize table names, we must use string substitution here!
