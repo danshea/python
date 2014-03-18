@@ -98,7 +98,10 @@ def createTables(outfile, records):
             # second argument to the cursor's execute() method.
             
             # create a parameter string based on the columns
-            column_names = record.col_defs.keys()
+            
+            # Have to use table_rows[0] as keys() does not return the proper order
+            # column_names = record.col_defs.keys()
+            column_names = record.table_rows[0]
             # put quotes around the column names
             column_names = ['\'{0:s}\''.format(col_name) for col_name in column_names]
             column_string = ','.join(['{{{0:d}:s}}'.format(i) for i in range(len(column_names))])
