@@ -1,0 +1,105 @@
+########################################
+# Program: needle
+# Rundate: Fri 25 Apr 2014 23:28:30
+# Commandline: needle
+#    -outfile JX475048.1_JX462669.1_needle.txt
+#    -asequence JX475048.1.fa
+#    -bsequence JX462669.1.fa
+#    -gapopen 10
+#    -gapextend 1
+#    -endweight True
+#    -endopen 10
+#    -endextend 1
+# Align_format: srspair
+# Report_file: JX475048.1_JX462669.1_needle.txt
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: JX475048.1
+# 2: JX462669.1
+# Matrix: EDNAFULL
+# Gap_penalty: 10.0
+# Extend_penalty: 1.0
+#
+# Length: 820
+# Identity:     277/820 (33.8%)
+# Similarity:   277/820 (33.8%)
+# Gaps:         452/820 (55.1%)
+# Score: 65.0
+# 
+#
+#=======================================
+
+JX475048.1         1 TATGGTTCTAGCTGGTAAACTTAGTACTGAACTTGGGATCAAAACACCAG     50
+                      ||||                .|||.|                 .|||||
+JX462669.1         1 -ATGG----------------CAGTTC-----------------GACCAG     16
+
+JX475048.1        51 CTGACAAGTTCTTCAAACTGTTTGCATCAGAA-CTTCATGAAGTGCAAAA     99
+                     |         .|||||||        .||.|| |.|||..|||   |.||
+JX462669.1        17 C---------ATTCAAAC--------CCAAAATCATCAAAAAG---AGAA     46
+
+JX475048.1       100 CCTTTGTGAAAGAGTTCATCATAC-CAAAATTCATCA-TGGTGAAGACTG    147
+                     |      |||..||||||||   | |      ||||| |.|    |||.|
+JX462669.1        47 C------GAAGAAGTTCATC---CGC------CATCAGTCG----GACCG     77
+
+JX475048.1       148 GCATCACAATGAATCGGTTAAACACTGGACTTATGTCATAGATGGGGAGG    197
+                     ..||.||||      .||.||     |||          ||.|.||    
+JX462669.1        78 ATATGACAA------AGTCAA-----GGA----------AGCTTGG----    102
+
+JX475048.1       198 TACACACATG--TAATGAAAGTATTGAAGAAGTTGATGAAGAGAACAAAA    245
+                         |.||.|  .||.|   ||||||                  ||||.|
+JX462669.1       103 ----CGCAAGCCCAAGG---GTATTG------------------ACAACA    127
+
+JX475048.1       246 AAATCACCTACAAGCTGTTTGGTGGAGATATCGACAACTTTACTGTTTTT    295
+                     .|.||                    |||..|||             .|||
+JX462669.1       128 GAGTC--------------------AGACGTCG-------------CTTT    144
+
+JX475048.1       296 AAGCTGATTCTGGA-AGTAATTAATAAGGATGATGGC--ACTTCTGCTGT    342
+                     |||        ||| ||||         ..|||||.|  ||.||.|||  
+JX462669.1       145 AAG--------GGACAGTA---------CCTGATGCCAAACATCGGCT--    175
+
+JX475048.1       343 TAGATGGACTATTGATT---ATGTGAAAATCAGTGAAGATGTTGATACT-    388
+                            ||    |.||   |.|..||.|.|.|..|       .||.|| 
+JX462669.1       176 -------AC----GGTTCCAACGCCAAGACCCGCCA-------CATGCTC    207
+
+JX475048.1       389 CCAAATGGCTGGATG--GATTACCTTAGCA--AAAGCACTAGAGACATTG    434
+                     ||.||.||||..|.|  |.|.|||.|  ||  ||.|..|..|||   |||
+JX462669.1       208 CCCAACGGCTTCAAGAAGTTCACCGT--CAACAACGTCCGCGAG---TTG    252
+
+JX475048.1       435 ATGGCCATCTT-AT----CAAA-----------GGAGAAAAGGTTGCTCT    468
+                     ..||   |||| ||    ||||           .|.|...||||.|||| 
+JX462669.1       253 GAGG---TCTTGATGATGCAAAACCGCGTTTACTGCGCCGAGGTCGCTC-    298
+
+JX475048.1       469 ATAAGTTATAAAGATGC--TATGTGAAATAAAGAGTATGCTATGATTTG-    515
+                                  |.||  |..|.|..|..|||.|||.||  ||||.|| 
+JX462669.1       299 -------------ACGCCGTCAGCGCCAAGAAGCGTAAGC--TGATCTGC    333
+
+JX475048.1       516 --ATGGTGTTTGCTTTTGGGGATTATACTTAAATATTGCATCTTTGTAAT    563
+                       |.|     |||                |||     |||.| |.|.|||
+JX462669.1       334 GAACG-----TGC----------------TAA-----GCAGC-TGGGAAT    356
+
+JX475048.1       564 TTGTGTGATGCTTGTAATGCCTTCTATGTATAGCATATATAAGCATGCAT    613
+                     ..||||||           ||                   ||        
+JX462669.1       357 CCGTGTGA-----------CC-------------------AA--------    368
+
+JX475048.1       614 GTTTGCTTCTCTTCATGCTTCCTTTGTATGGAATGAATGTGTCGGCCATG    663
+                          ||||    ||.||              |.|||||           
+JX462669.1       369 -----CTTC----CACGC--------------AAGAATG-----------    384
+
+JX475048.1       664 TATTGATGATCGTGTCCTGGATTATTATTATTATTATTATTATTATTAAA    713
+                           .||||                                       
+JX462669.1       385 ------CGATC---------------------------------------    389
+
+JX475048.1       714 AAAAAAAACAAGAAAAAAAAAAAGTCCTCTGGCCTTAAACCACCTGCTTA    763
+                            |||.|||||                            ||..||
+JX462669.1       390 -------ACAGGAAAA----------------------------TGAGTA    404
+
+JX475048.1       764 ATCATTAGGGCGGCCGCCGG    783
+                     |                   
+JX462669.1       405 A-------------------    405
+
+
+#---------------------------------------
+#---------------------------------------
