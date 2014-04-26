@@ -1,0 +1,38 @@
+########################################
+# Program: water
+# Rundate: Sat 26 Apr 2014 00:52:07
+# Commandline: water
+#    -outfile A9QYR8_Q14ID0_water.txt
+#    -asequence A9QYR8.fa
+#    -bsequence Q14ID0.fa
+#    -gapopen 10
+#    -gapextend 1
+# Align_format: srspair
+# Report_file: A9QYR8_Q14ID0_water.txt
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: RHAS_YERPG
+# 2: RS15_FRAT1
+# Matrix: EBLOSUM62
+# Gap_penalty: 10.0
+# Extend_penalty: 1.0
+#
+# Length: 10
+# Identity:       5/10 (50.0%)
+# Similarity:     7/10 (70.0%)
+# Gaps:           0/10 ( 0.0%)
+# Score: 23.0
+# 
+#
+#=======================================
+
+RHAS_YERPG       223 LRLLQARHQL    232
+                     |||:..|.:|
+RS15_FRAT1        56 LRLVSQRRKL     65
+
+
+#---------------------------------------
+#---------------------------------------
