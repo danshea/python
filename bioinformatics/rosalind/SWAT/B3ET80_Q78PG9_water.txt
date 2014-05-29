@@ -1,0 +1,38 @@
+########################################
+# Program: water
+# Rundate: Sat 26 Apr 2014 00:51:12
+# Commandline: water
+#    -outfile B3ET80_Q78PG9_water.txt
+#    -asequence B3ET80.fa
+#    -bsequence Q78PG9.fa
+#    -gapopen 10
+#    -gapextend 1
+# Align_format: srspair
+# Report_file: B3ET80_Q78PG9_water.txt
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: NUOB_AMOA5
+# 2: CCD25_MOUSE
+# Matrix: EBLOSUM62
+# Gap_penalty: 10.0
+# Extend_penalty: 1.0
+#
+# Length: 23
+# Identity:      11/23 (47.8%)
+# Similarity:    14/23 (60.9%)
+# Gaps:           2/23 ( 8.7%)
+# Score: 35.0
+# 
+#
+#=======================================
+
+NUOB_AMOA5        66 RQADVMIVSGTVTFKMADSIRRL     88
+                     ||.||.||  ||..|:.:.:.||
+CCD25_MOUSE      113 RQKDVKIV--TVEKKVNEILNRL    133
+
+
+#---------------------------------------
+#---------------------------------------
