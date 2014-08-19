@@ -28,7 +28,7 @@ i	j	l
 [3, 8, 9]
 
 We can further refine this, eliminating the comparison of an element with itself and only performing
-n-1 comparisons when passed an already sorted list, however n**2 - n still yields O(n) for the worst case runtime
+n-1 comparisons when passed an already sorted list, however n**2 - n still yields O(n**2) for the worst case runtime
 as n**2 quickly outstrips any gains made as n tends towards infinity.
 
 >>> bubblesort2([random.randint(1,10) for i in range(3)])
