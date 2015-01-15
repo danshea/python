@@ -46,13 +46,13 @@ def patienceSort(n, seq):
     index = n-1
     while stacks[index] == []:
         index -= 1
-    # First Item in lcis
+    # First Item in lgis
     current = stacks[index][-1]
-    lcis = [current]
+    lgis = [current]
     while current.link != None:
         current = current.link
-        lcis.append(current)
-    return(reversed(lcis))
+        lgis.append(current)
+    return(reversed(lgis))
 
 def main():
     """ The main() """
