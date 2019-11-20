@@ -1,7 +1,7 @@
 Date: 2013-01-15
+Update: 2019-11-20  
 
-Author: djs
+Author: Dan Shea (djs)
 
-Description: This git repository is a collection of various python code I have written or am currently writing.  It is mostly for personal consumption, although anyone may take a peek and see what I work on in my spare time, that is ok by me.  Anyone wishing to contact me regarding this repository either for questions, comments or suggestions to improve my code are more than welcome to reach me at:
-
-daniel(DOT)john(DOT)shea(AT)gmail(DOT)com
+Description: This git repository is a collection of various python code I have written over the years.  
+It goes back at least 7 years or so now, so some code is 2.x and newer things will be 3.x.  
