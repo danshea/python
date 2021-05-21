@@ -1,10 +1,14 @@
 Date: 2013-01-15
 Update: 2019-11-20  
 Update: 2021-04-12
+Update: 2021-05-22
 
 Author: Dan Shea (djs)
 
 Description: This git repository is a collection of various python code I have written over the years.  
 It goes back at least 7 years or so now, so some code is 2.x and newer things will be 3.x.  
 
-This repository is now fairly long in the tooth. It doesn't get updates all that often.
+This repository is now fairly long in the tooth in places.  
+Some of the older stuff might no longer run as some of the dependent libraries have been re-written.  
+Case in point, my Monte Carlo Pi approximation made use of wxpython and displayed a rudimentary gui window to illustrate the simulation.  
+I've since re-written it as a notebook that uses ipycanvas.
